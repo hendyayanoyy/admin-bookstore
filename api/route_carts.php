@@ -77,7 +77,7 @@ function addCarts() {
 function deleteCarts() {
     $carts = $GLOBALS['carts'];
     
-    if($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+    if($_SERVER['REQUEST_METHOD'] === 'GET') {
         $carts->id = $_GET['id'] ?? null;
         $delete = $carts->deleteCart();
         if($delete) {
