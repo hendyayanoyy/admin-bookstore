@@ -1,0 +1,12 @@
+{
+    "name": "hendi/admin-book",
+    "require": {
+        "firebase/php-jwt": "^6.10"
+    },
+    "license": "isc",
+    "authors": [
+        {
+            "name": "Hendi Saputra"
+        }
+    ]
+}
