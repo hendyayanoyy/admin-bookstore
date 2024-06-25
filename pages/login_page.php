@@ -1,13 +1,14 @@
 <?php
 require '../vendor/autoload.php';
 
-use Helpers\SessionHelper;
+include '../helper/session.php';
 
 $session = new SessionHelper();
 
 if ($session->cek_login_exists()) {
     header("location: ../layout/panel_dashboard.php");
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
