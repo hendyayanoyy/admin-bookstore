@@ -10,10 +10,10 @@ header("access-control-max-age: 86400");
 header("access-control-allow-private-network: true");
 
 
-$servername = "";
-$username = "";
+$servername = "localhost";
+$username = "root";
 $password = "";
-$dbname = "";
+$dbname = "bookstore";
 
 // Membuat koneksi
 $conn = new mysqli($servername, $username, $password, $dbname);

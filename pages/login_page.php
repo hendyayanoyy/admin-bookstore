@@ -1,16 +1,14 @@
 <?php
+require '../vendor/autoload.php';
 
-include '../helper/session.php';
+use Helpers\SessionHelper;
 
-    $session = new SessionHelper();
+$session = new SessionHelper();
 
-    if($session->cek_login_exists()) {
-        header("location: ../layout/panel_dashboard.php");
-    }
-
+if ($session->cek_login_exists()) {
+    header("location: ../layout/panel_dashboard.php");
+}
 ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -36,7 +34,7 @@ include '../helper/session.php';
                         <input type="password" class="form-control" id="password" name="password" required>
                     </div>
                     <button type="submit" class="btn btn-primary">Login</button>
-                    <p class="mt-3">Don't have an account? <a href="register.php">Register here</a>.</p>
+                    <p class="mt-3">Don't have an account? <a href="register_page.php">Register here</a>.</p>
                 </form>
             </div>
         </div>

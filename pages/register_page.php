@@ -23,7 +23,7 @@
                         <input type="password" class="form-control" id="password" name="password" required>
                     </div>
                     <button type="submit" class="btn btn-primary">Register</button>
-                    <p class="mt-3">Already have an account? <a href="index.php">Login here</a>.</p>
+                    <p class="mt-3">Already have an account? <a href="../index.php">Login here</a>.</p>
                 </form>
             </div>
         </div>

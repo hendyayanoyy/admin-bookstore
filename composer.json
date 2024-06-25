@@ -8,5 +8,10 @@
         {
             "name": "Hendi Saputra"
         }
-    ]
+    ],
+    "autoload": {
+        "psr-4": {
+            "Helpers\\": "helper/"
+        }
+    }
 }
