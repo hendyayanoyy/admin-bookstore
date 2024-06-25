@@ -1,10 +1,12 @@
 <?php
 
-include '../helper/session.php';
+    include '../helper/session.php';
+
+    use Helpers\SessionHelper;
 
     $session = new SessionHelper();
 
-    if($session->cek_login_exists()) {
+    if($session->cek_login_admin()) {
         header("location: ../layout/panel_dashboard.php");
     }
 
