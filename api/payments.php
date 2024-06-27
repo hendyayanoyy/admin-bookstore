@@ -95,7 +95,12 @@ class Payments {
         return false;
     }
 
-    public function _map_payments($payment): array {
+    public function _map_payments($payment): array|null {
+
+        if(empty($payment)) {
+            return null;
+        }
+
         if(!empty($payment)) {
             $payment['id'] = (int) $payment['id'];
             $payment['total'] = (double) $payment['total'];
@@ -110,7 +115,7 @@ class Payments {
             $payment['member'] = Helper::getMemberById($payment['member_id']);
         }
 
-        return $payment;
+        return $payment ?? null;
     }
 
 }
