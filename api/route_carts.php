@@ -1,14 +1,12 @@
 <?php 
 
-include 'carts.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
 header('Content-Type: application/json');
 
 use Api\Carts;
 
-$carts = new Carts();
-
 function getLists() {
-    $carts = $GLOBALS['carts'];
+    $carts = new Carts();
     
     if($_SERVER['REQUEST_METHOD'] === 'GET') {
         $carts->member_id = $_GET['member_id'] ?? null;
@@ -42,7 +40,7 @@ function getLists() {
 }
 
 function addCarts() {
-    $carts = $GLOBALS['carts'];
+    $carts = new Carts();
     
     if($_SERVER['REQUEST_METHOD'] === 'POST') {
         $carts->member_id = $_POST['member_id'] ?? null;
@@ -75,7 +73,7 @@ function addCarts() {
 }
 
 function deleteCarts() {
-    $carts = $GLOBALS['carts'];
+    $carts = new Carts();
     
     if($_SERVER['REQUEST_METHOD'] === 'GET') {
         $carts->id = $_GET['id'] ?? null;

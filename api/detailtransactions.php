@@ -2,10 +2,9 @@
 
 namespace Api;
 
-include '../config.php';
-include 'books.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
 
-use Api\Book;
+use Api\Books;
 
 class DetailTransactions {
 
@@ -15,7 +14,11 @@ class DetailTransactions {
     public int $quantity;
     public float $price;
 
-    public function __construct() {}
+    private object $conn;
+
+    public function __construct() {
+        $this->conn = getConnection();
+    }
 
     public function getDetailTransactions() {
         $query = "SELECT * FROM transaction_details";
@@ -24,7 +27,7 @@ class DetailTransactions {
             $query .= " WHERE transaction_id = $this->transaction_id";
         }
 
-        $result = mysqli_query($GLOBALS['conn'], $query);
+        $result = mysqli_query($this->conn, $query);
         $detail = $result->fetch_all(MYSQLI_ASSOC);
         return $detail;
     }
@@ -32,7 +35,7 @@ class DetailTransactions {
     public function createDetailTransaction() {
         $query = "INSERT INTO transaction_details (transaction_id, book_id, quantity, price) VALUES ($this->transaction_id, $this->book_id, $this->quantity, $this->price)";
         
-        $result = mysqli_query($GLOBALS['conn'], $query);
+        $result = mysqli_query($this->conn, $query);
 
         if($result) return true;
 
@@ -43,8 +46,10 @@ class DetailTransactions {
         $detail['id'] = (int)$detail['id'];
         $detail['quantity'] = (int)$detail['quantity'];
         $detail['price'] = (double)$detail['price'];
+        $detail['book_id'] = (int)$detail['book_id'];
+        $detail['transaction_id'] = (int)$detail['transaction_id'];
     
-        $books = new Book();
+        $books = new Books();
         $books->id = $detail['book_id'];
         $detail_book = $books->detailBook($books->id);
         $detail['book'] = $books->_map_books($detail_book);

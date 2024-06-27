@@ -2,9 +2,9 @@
 
 namespace Api;
 
-include '../config.php';
+include $_SERVER['DOCUMENT_ROOT'].'/vendor/autoload.php';
 
-class Book {
+class Books {
     public int $id;
     public string $title;
     public string $author;
@@ -14,15 +14,16 @@ class Book {
     public float $rating;
     public float $price;
 
+    private object $conn;
+
     public function __construct() {
+        $this->conn = getConnection();
     }
 
     public function getBooks(): array {
-        // Implementasi logika untuk mendapatkan semua buku
-
         $query = "SELECT * FROM books";
 
-        $list_books = mysqli_query($GLOBALS['conn'], $query);
+        $list_books = mysqli_query($this->conn, $query);
         $list_books = $list_books->fetch_all(MYSQLI_ASSOC);
         
         return $list_books;
@@ -32,7 +33,7 @@ class Book {
         // Implementasi logika untuk mendapatkan buku teratas
         $query = "SELECT * FROM books ORDER BY rating DESC LIMIT 6";
 
-        $top_books = mysqli_query($GLOBALS['conn'], $query);
+        $top_books = mysqli_query($this->conn, $query);
         $top_books = $top_books->fetch_all(MYSQLI_ASSOC);
         
         return $top_books;
@@ -42,7 +43,7 @@ class Book {
         // Implementasi logika untuk mendapatkan buku teratas
         $query = "SELECT * FROM books ORDER BY id DESC LIMIT 6";
 
-        $news_books = mysqli_query($GLOBALS['conn'], $query);
+        $news_books = mysqli_query($this->conn, $query);
         $news_books = $news_books->fetch_all(MYSQLI_ASSOC);
         
         return $news_books;
@@ -51,7 +52,7 @@ class Book {
     public function detailBook(int $id): array {
         $query = "SELECT * FROM books WHERE id = $id";
 
-        $detail_books = mysqli_query($GLOBALS['conn'], $query);
+        $detail_books = mysqli_query($this->conn, $query);
         $detail_books = $detail_books->fetch_assoc();
         
         return $detail_books;

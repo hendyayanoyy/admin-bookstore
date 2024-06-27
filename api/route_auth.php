@@ -1,28 +1,24 @@
 <?php
 
-include 'auth.php';
-include '../helper/JWT.php';
-include '../helper/session.php';
-
 header('Content-Type: application/json');
+include $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
 
 use Api\Auth;
-$auth = new Auth();
-
 use Helpers\SessionHelper;
-$session = new SessionHelper();
 
 function login() {
     if($_SERVER['REQUEST_METHOD'] === 'POST') {
         $email = $_POST['email'];
         $password = $_POST['password'];
 
-        $auth = $GLOBALS['auth'];
+        $auth = new Auth();
         $auth->email = $email;
         $auth->password = $password;
         $login = $auth->login();
         
-        $token = $GLOBALS['session']->getToken($email);
+        $session = new SessionHelper();
+
+        $token = $session->getToken($email);
         $token['user'] = $auth->_map_profile($auth->getProfile());
 
         if($login) {
@@ -108,7 +104,7 @@ function logout() {
 
 function getProfile() {
     if($_SERVER['REQUEST_METHOD'] === 'GET') {
-        $authorization = $GLOBALS['session']->cek_login_exists();
+        $authorization = SessionHelper::cek_login_exists();
 
         if(!$authorization) {
             echo json_encode([
@@ -119,7 +115,7 @@ function getProfile() {
             return;
         }
         
-        $auth = $GLOBALS['auth'];
+        $auth = new Auth();
         $auth->email = $authorization->email;
         $profile = $auth->getProfile();
         if($profile) {

@@ -2,7 +2,7 @@
 
 namespace Api;
 
-include '../config.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
 
 class Members {
 
@@ -10,11 +10,15 @@ class Members {
     public string $nama;
     public string $email;
     public string $password;
+
+    private object $conn;
     
-    public function __construct() {}
+    public function __construct() {
+        $this->conn = getConnection();
+    }
 
     public function detailMember(int $id = null): array {
-        $conn = $GLOBALS['conn'];
+        $conn = $this->conn;
         $query = "SELECT * FROM members WHERE id = $id";
         $result = mysqli_query($conn, $query);
         $result = $result->fetch_assoc();

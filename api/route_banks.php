@@ -1,10 +1,9 @@
 <?php 
 
-include 'banks.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
 header('Content-Type: application/json');
 
 use Api\Banks;
-$banks = new Banks();
 
 function getBanks() {
     $banks = new Banks();

@@ -1,15 +1,12 @@
 <?php 
 
-include 'transactions.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
 header('Content-Type: application/json');
 use Api\Transactions;
 use Api\Payments;
 
-$transactions = new Transactions();
-$payments = new Payments();
-
 function getTransactions() {
-    $transactions = $GLOBALS['transactions'];
+    $transactions = new Transactions();
     
     if($_SERVER['REQUEST_METHOD'] == 'GET') {
         $transactions->member_id = $_GET['member_id'] ?? null;
@@ -51,7 +48,7 @@ function getTransactions() {
 }
 
 function detailTransaction() {
-    $transactions = $GLOBALS['transactions'];
+    $transactions = new Transactions();
 
     if($_SERVER['REQUEST_METHOD'] == 'GET') {
         $transaction = $transactions->detailTransaction($_GET['id']);
@@ -88,10 +85,10 @@ function detailTransaction() {
 }
 
 function createTransaction() {
-    $transactions = $GLOBALS['transactions'];
+    $transactions = new Transactions();
     if($_SERVER['REQUEST_METHOD'] == 'POST') {
         $transactions->total = $_POST['total']; 
-        $transactions->detail = $_POST['detail'];
+        $transactions->detail = json_decode($_POST['detail']);
         $transactions->member_id = $_POST['member_id'];
         $transaction = $transactions->createTransaction();
         
@@ -123,7 +120,7 @@ function createTransaction() {
 }
 
 function createPayments() {
-    $payments = $GLOBALS['payments'];
+    $payments = new Payments();
     if($_SERVER['REQUEST_METHOD'] == 'POST') {
         $payments->transaction_id = $_POST['transaction_id'];
         $payments->total = $_POST['total'];
@@ -158,7 +155,7 @@ function createPayments() {
 }
 
 function detailPayment() {
-    $payments = $GLOBALS['payments'];
+    $payments = new Payments();
 
     if($_SERVER['REQUEST_METHOD'] == 'GET') {
         $payments->transaction_id = $_GET['id'];

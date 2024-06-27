@@ -2,8 +2,7 @@
 
 namespace Helpers;
 
-include 'helper.php';
-include '../vendor/autoload.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
 
 
 use Exception;
@@ -12,11 +11,11 @@ use Firebase\JWT\Key;
 
 use Helpers\Helper;
 
-$key = 'jwt-secret-flutter';
-
 class JWTHelper {
     public string $token;
     public string $expire;
+
+    private string $key = 'jwt-secret-flutter';
 
     public function __construct() {}
 
@@ -39,7 +38,7 @@ class JWTHelper {
 
     private function decode() {
         try {
-            $decoded = JWT::decode($this->token, new Key($GLOBALS['key'], 'HS256'));
+            $decoded = JWT::decode($this->token, new Key($this->key, 'HS256'));
             return $decoded;
         } catch(Exception $e) {
             return "invalid token";
@@ -47,7 +46,7 @@ class JWTHelper {
     }
 
     private function encode($email = null) {
-        $key = $GLOBALS['key'];
+        $key = $this->key;
 
         if($email) {
             $member = Helper::getMemberByEmail($email);

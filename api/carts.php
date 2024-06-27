@@ -2,19 +2,21 @@
 
 namespace Api;
 
-include '../config.php';
-include '../helper/helper.php';
-include 'books.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
 
 use Helpers\Helper;
-use Api\Book;
+use Api\Books;
 
 class Carts {
     public int $id;
     public int $book_id;
     public int|null $member_id;
 
-    public function __construct() {}
+    private object $conn;
+
+    public function __construct() {
+        $this->conn = getConnection();
+    }
 
     public function getLists(): array {
         $query = "SELECT * FROM carts";
@@ -28,7 +30,7 @@ class Carts {
             $query .= " WHERE member_id = " . $user['id'];
         }
 
-        $conn = $GLOBALS['conn'];
+        $conn = $this->conn;
         $result = mysqli_query($conn, $query);
         $result = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
@@ -36,7 +38,7 @@ class Carts {
     }
 
     public function detailCart(): array {
-        $conn = $GLOBALS['conn'];
+        $conn = $this->conn;
         $query = "SELECT * FROM carts WHERE id = " . $this->id;
 
         $result = mysqli_query($conn, $query);
@@ -46,7 +48,7 @@ class Carts {
     }
 
     public function cartExists(): array {
-        $conn = $GLOBALS['conn'];
+        $conn = $this->conn;
         $query = "SELECT * FROM carts WHERE book_id = " . $this->book_id . " AND member_id = " . $this->member_id;
 
         $result = mysqli_query($conn, $query);
@@ -56,9 +58,9 @@ class Carts {
     }
 
     public function createCarts(): bool {
-        $conn = $GLOBALS['conn'];
+        $conn = $this->conn;
 
-        $book = new Book();
+        $book = new Books();
         $detail_book = $book->detailBook($this->book_id);
         if(!$detail_book) {
             return false;
@@ -89,7 +91,7 @@ class Carts {
     }
 
     public function deleteCart(): bool {
-        $conn = $GLOBALS['conn'];
+        $conn = $this->conn;
         
         $cart = $this->detailCart();
         if(!$cart) {
@@ -106,12 +108,25 @@ class Carts {
         return true;
     }
 
+    public static function deleteBatchCarts(array $book, $member): bool {
+        $conn = getConnection();
+
+        $query = "DELETE FROM carts WHERE book_id IN (" . implode(',', $book) . ") AND member_id = " . $member;
+        $result = mysqli_query($conn, $query);
+
+        if (!$result) {
+            return false;
+        }
+
+        return true;
+    }
+
     public function _map_carts($cart):array {
         $cart['id'] = (int) $cart['id'];
         $cart['book_id'] = (int) $cart['book_id'];
         $cart['member_id'] = (int) $cart['member_id'];
 
-        $book = new Book();
+        $book = new Books();
         $book->id = $cart['book_id'];
         $detail_book = $book->detailBook($book->id);
         $cart['book'] = $book->_map_books($detail_book);

@@ -2,14 +2,12 @@
 
 namespace Api;
 
-include '../config.php';
-include 'banks.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
 
 use Helpers\Helper;
 use Api\Transactions;
 use Api\Banks;
-
-$transaction = new Transactions();
+use mysqli;
 
 class Payments {
 
@@ -21,15 +19,18 @@ class Payments {
     public int|null $transaction_id;
     public string $status;
     public int|null $member_id;
+    private object $conn;
 
     CONST FAILED = 'failed',
           PENDING = 'pending',
           COMPLETED = 'completed';
 
-    public function __construct() {}
+    public function __construct() {
+        $this->conn = getConnection();
+    }
 
     public function existsPayment(): array {
-        $conn = $GLOBALS['conn'];
+        $conn = $this->conn;
         $query = "SELECT * FROM payments WHERE transaction_id = '$this->transaction_id'";
         $result = mysqli_query($conn, $query);
         $result = mysqli_fetch_assoc($result);
@@ -41,7 +42,7 @@ class Payments {
     }
 
     public function detailPayment(): array {
-        $conn = $GLOBALS['conn'];
+        $conn = $this->conn;
         $query = "SELECT * FROM payments WHERE transaction_id = '$this->transaction_id'";
         $result = mysqli_query($conn, $query);
         $result = mysqli_fetch_assoc($result);
@@ -53,9 +54,10 @@ class Payments {
     }
 
     public function createPayment(): bool {
-        $conn = $GLOBALS['conn'];
+        $conn = $this->conn;
 
-        $transaction = $GLOBALS['transaction'];
+        mysqli_begin_transaction($conn);
+        $transaction = new Transactions();
         $transaction = $transaction->detailTransaction($this->transaction_id);
         if (!$transaction) {
             return false;
@@ -81,10 +83,15 @@ class Payments {
 
         $result = mysqli_query($conn, $query);
 
+        $query = "UPDATE transactions SET status = 'waiting payment' WHERE id = '$transaction_id'";
+        mysqli_query($conn, $query);
+
         if ($result) {
+            mysqli_commit($conn);
             return true;
         }
 
+        mysqli_rollback($conn);
         return false;
     }
 
@@ -94,7 +101,6 @@ class Payments {
             $payment['total'] = (double) $payment['total'];
             $payment['bank_id'] = (int) $payment['bank_id'];
             $payment['member_id'] = (int) $payment['member_id'];
-            $payment['number_virtual'] = (int) $payment['number_virtual'];
             $payment['transaction_id'] = (int) $payment['transaction_id'];
 
             $bank = new Banks();

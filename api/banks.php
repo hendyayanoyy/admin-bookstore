@@ -2,7 +2,7 @@
 
 namespace Api;
 
-include '../config.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
 
 class Banks {
 
@@ -13,10 +13,14 @@ class Banks {
     public string $url;
     public string $signature;
 
-    public function __construct() {}
+    private object $conn;
+
+    public function __construct() {
+        $this->conn = getConnection();
+    }
 
     public function getBanks(): array {
-        $conn = $GLOBALS['conn'];
+        $conn = $this->conn;
         $query = "SELECT * FROM banks";
         $result = mysqli_query($conn, $query);
         $result = $result->fetch_all(MYSQLI_ASSOC);
@@ -28,7 +32,7 @@ class Banks {
     }
 
     public function detailBank(int $id): array {
-        $conn = $GLOBALS['conn'];
+        $conn = $this->conn;
         $query = "SELECT * FROM banks WHERE id = $id";
         $result = mysqli_query($conn, $query);
         $result = $result->fetch_assoc();
