@@ -2,7 +2,7 @@
 
 namespace Api;
 
-include '../config.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
 
 class Auth {
 
@@ -11,10 +11,14 @@ class Auth {
     public string $email;
     public string $password;
 
-    public function __construct() {}
+    private object $conn;
+
+    public function __construct() {
+        $this->conn = getConnection();
+    }
 
     public function login() {
-        $conn = $GLOBALS['conn'];
+        $conn = $this->conn;
         $query = "SELECT * FROM members WHERE email = '$this->email'";
         $result = mysqli_query($conn, $query);
         $result = $result->fetch_assoc();
@@ -27,7 +31,7 @@ class Auth {
     }
 
     public function register() {
-        $conn = $GLOBALS['conn'];
+        $conn = $this->conn;
         $password = password_hash($this->password, PASSWORD_DEFAULT);
         $query = "INSERT INTO members (nama, email, password) VALUES ('$this->name', '$this->email', '$password')";
         $register = mysqli_query($conn, $query);
@@ -39,7 +43,7 @@ class Auth {
     }
 
     public function getProfile() {
-        $conn = $GLOBALS['conn'];
+        $conn = $this->conn;
         $query = "SELECT * FROM members WHERE email = '$this->email'";
         $result = mysqli_query($conn, $query);
         $result = $result->fetch_assoc();

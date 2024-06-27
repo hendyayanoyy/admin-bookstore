@@ -10,8 +10,12 @@
         }
     ],
     "autoload": {
+        "files": [
+            "config.php"
+        ],
         "psr-4": {
-            "Helpers\\": "helper/"
+            "Helpers\\": "helper/",
+            "Api\\": "api/"
         }
     }
 }

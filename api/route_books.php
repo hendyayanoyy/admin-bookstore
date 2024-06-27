@@ -1,14 +1,12 @@
 <?php
 
-include 'books.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
 header('Content-Type: application/json');
 
-use Api\Book;
-
-$books = new Book();
+use Api\Books;
 
 function getBooks() {
-    $books = $GLOBALS['books'];
+    $books = new Books();
     if($_SERVER['REQUEST_METHOD'] == 'GET') {
         $list = $books->getBooks();
 
@@ -48,7 +46,7 @@ function getBooks() {
 }
 
 function topBooks() {
-    $books = $GLOBALS['books'];
+    $books = new Books();
     if($_SERVER['REQUEST_METHOD'] == 'GET') {
         $list = $books->topBooks();
 
@@ -88,7 +86,7 @@ function topBooks() {
 }
 
 function newsBooks() {
-    $books = $GLOBALS['books'];
+    $books = new Books();
     if($_SERVER['REQUEST_METHOD'] == 'GET') {
         $list = $books->newsBooks();
 
@@ -128,7 +126,7 @@ function newsBooks() {
 }
 
 function detailBook() {
-    $books = $GLOBALS['books'];
+    $books = new Books();
     if($_SERVER['REQUEST_METHOD'] == 'GET') {
         $book = $books->detailBook($_GET['id']);
         if(empty($book)) {

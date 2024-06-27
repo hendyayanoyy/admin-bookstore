@@ -2,6 +2,8 @@
 
 namespace Helpers;
 
+include $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
+
 session_start();
 
 use Helpers\JWTHelper;
@@ -15,7 +17,7 @@ class SessionHelper {
         return $token;
     }
 
-    public function cek_login_exists() {
+    public static function cek_login_exists() {
         $jwt = new JWTHelper();
         $authorization = $_SERVER['HTTP_AUTHORIZATION'] ?? false;
 
