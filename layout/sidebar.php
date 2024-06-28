@@ -1,6 +1,6 @@
 <?php
-include '../config.php';
 
+$conn = getConnection();
 // Mengambil jumlah buku dari tabel books
 $query = "SELECT COUNT(*) as total FROM books";
 $result = mysqli_query($conn, $query);

@@ -1,7 +1,8 @@
 <?php
-require '../vendor/autoload.php';
 
-include '../helper/session.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
+
+use Helpers\SessionHelper;
 
 $session = new SessionHelper();
 

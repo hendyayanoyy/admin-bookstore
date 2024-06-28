@@ -1,5 +1,6 @@
 <?php
-include '../config.php';
+
+include $_SERVER['DOCUMENT_ROOT'].'/vendor/autoload.php';
 
 session_start();
 if (!isset($_SESSION['username'])) {
@@ -14,7 +15,7 @@ header("Expires: 0");
 
 // Mengambil jumlah buku dari tabel books
 $query = "SELECT COUNT(*) as total FROM books";
-$result = mysqli_query($conn, $query);
+$result = mysqli_query(getConnection(), $query);
 if ($result) {
     $data = mysqli_fetch_assoc($result);
     $totalBooks = $data['total'];
@@ -24,7 +25,7 @@ if ($result) {
 
 // Mengambil total admin dari tabel admin
 $query = "SELECT COUNT(*) as total FROM admin";
-$result = mysqli_query($conn, $query);
+$result = mysqli_query(getConnection(), $query);
 if ($result) {
     $data = mysqli_fetch_assoc($result);
     $totalAdmins = $data['total'];

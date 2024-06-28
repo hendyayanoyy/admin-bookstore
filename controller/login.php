@@ -1,7 +1,10 @@
 <?php
-include '../config.php';
+
+include $_SERVER['DOCUMENT_ROOT'].'/vendor/autoload.php';
 
 session_start();
+
+$conn = getConnection();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $conn->real_escape_string($_POST['username']);
