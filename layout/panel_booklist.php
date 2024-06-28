@@ -1,3 +1,7 @@
+<?php
+    include $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -30,8 +34,6 @@
                 </thead>
                 <tbody>
                     <?php
-                    // Database connection parameters
-                    include '../config.php';
                     // Query to get books
                     $sql = "SELECT id, title, description, image, year, author, rating FROM books";
                     $result = $conn->query($sql);
@@ -43,7 +45,7 @@
                                 <td>" . $row["id"] . "</td>
                                 <td>" . $row["title"] . "</td>
                                 <td>" . $row["description"] . "</td>
-                                <td><img src='uploads/" . $row["image"] . "' alt='Book Image' width='100'></td>
+                                <td><img src='../assets/books/" . $row["image"] . "' alt='Book Image' width='100'></td>
                                 <td>" . $row["year"] . "</td>
                                 <td>" . $row["author"] . "</td>
                                 <td>" . $row["rating"] . "</td>
@@ -177,7 +179,7 @@
                 $('#edit_id').val($(this).data('id'));
                 $('#edit_title').val($(this).data('title'));
                 $('#edit_description').val($(this).data('description'));
-                $('#edit_image_preview').attr('src', 'uploads/' +
+                $('#edit_image_preview').attr('src', '../assets/books/' +
                     $(this).data('image'));
                 $('#edit_existing_image').val($(this).data('image'));
                 $('#edit_year').val($(this).data('year'));

@@ -1,7 +1,10 @@
 <?php
-require '../config.php';
+
+include $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
 
 session_start();
+
+$conn = getConnection();
 if (!isset($_SESSION['username'])) {
     header("Location: ../pages/login_page.php");
     exit();

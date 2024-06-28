@@ -53,7 +53,7 @@ function register() {
         $email = $_POST['email'];
         $password = $_POST['password'];
 
-        $auth = $GLOBALS['auth'];
+        $auth = new Auth();
         $auth->email = $email;
         $auth->password = $password;
         $auth->name = $nama;
